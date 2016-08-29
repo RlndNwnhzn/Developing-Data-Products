@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Testing Proportions App</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Testing Proportions App">
+  <meta name="author" content="Roland Nieuwenhuizen">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Testing Proportions App</h1>
+    <h2>Assignment for Coursera Developing Data Products Course</h2>
+    <p>Roland Nieuwenhuizen<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Motivation</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>When marketing research results are distributed, the audience often needs some guidance on the interpretation of the numbers.</li>
+<li>Questions that often arise are how accurate certain numbers are and how to interprete the difference between numbers.</li>
+<li>This app gives some guidance and self help for readers and users of research on those issues in the case of proportions.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>The App</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Type the sample sizes in the text boxes. The sample sizes have to be integer, greater than 40. If the sample size is numeric but not integer, it is rounded to the nearest integer. If the sample size is not numeric or smaller than 40, the app gives an error.</li>
+<li><p>Set the two proportions. Because of the method used, the proportions can&#39;t be too small or too large. If one of the proportions is set out off range, the app automatically adjusts to the nearest valid value.</p></li>
+<li><p>Now in the graph the app gives the confidence interval of the two proportions. With 95% confidence the &#39;true&#39; value of the proportion is within the interval.</p></li>
+<li><p>The app also gives the p-value: the probability of the observed proportions under the hypothesis that in reality they are equal. So the smaller the p-value, the less likely they are really equal.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Method and Prerequisites</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>In the calculations a normal approximation is used. This means that there are some prerequisites:</p>
+
+<ol>
+<li><p>Theoretically the population sizes have to be infinite. In practise the approximation is valid when the population sizes are much (say at least ten times) larger than the sample sizes. </p></li>
+<li><p>The normal approximation is only valid when the values of the proportions are not too extreme. Literature gives a lot of different rules to guarantee that the approximation is valid. In this app the following condition is used on sample size \((n)\) and proportion \((p)\):</p>
+
+<p>\[np(1-p) \ge 10\]</p></li>
+<li><p>The sample sizes have to be at least 40.</p></li>
+<li><p>If the above rules are not obeyed, the proportions are adjusted to the nearest valid value.</p></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>The Formula</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>On this slide the formula that is used to calculate the p-value is reproduced. It uses the same values for the sample sizes \((n)\) and proportions \((p)\) as the initial values of the app.</p>
+
+<pre><code class="r">survey1_p &lt;- 0.4; survey1_n &lt;- 100; survey2_p &lt;- 0.5; survey2_n &lt;- 100
+pooled_p &lt;- ((survey1_p*survey1_n)+(survey2_p*survey2_n)) / (survey1_n+survey2_n)
+survey1_var &lt;- (survey1_p*(1-survey1_p))/survey1_n
+survey2_var &lt;- (survey2_p*(1-survey2_p))/survey2_n
+pooled_var &lt;- (pooled_p*(1-pooled_p))*((1/survey1_n)+(1/survey2_n))
+
+z_value &lt;- abs(survey1_p-survey2_p)/sqrt(pooled_var)
+
+p_value &lt;- 2*(1-pnorm(z_value))
+sprintf(&quot;%1.1f%%&quot;, 100 * p_value)
+</code></pre>
+
+<pre><code>## [1] &quot;15.5%&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Motivation'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='The App'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Method and Prerequisites'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='The Formula'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
